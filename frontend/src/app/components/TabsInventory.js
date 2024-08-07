@@ -15,16 +15,47 @@ const TabsInventory = ({ userID, setInventoryData }) => {
     const [updatePrice, setUpdatePrice] = useState('');
     const [deleteProductID, setDeleteProductID] = useState('');
 
+    const clearCreateInputs = () => {
+        setProductName('');
+        setQuantity('');
+        setPrice('');
+    };
+
+    const clearReadInputs = () => {
+        setSearchTerm('');
+    };
+
+    const clearUpdateInputs = () => {
+        setUpdateProductID('');
+        setUpdateProductName('');
+        setUpdateQuantity('');
+        setUpdatePrice('');
+    };
+
+    const clearDeleteInputs = () => {
+        setDeleteProductID('');
+    };
+
+
     const handleCreate = async (e) => {
         e.preventDefault();
+        if (isNaN(quantity) || isNaN(price)) {
+            alert("Quantity and Price must be valid numbers");
+            return;
+        }
         try {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/inventory/create`, {
                 product_name: productName,
                 quantity: parseInt(quantity),
                 price: parseFloat(price),
                 user_id: userID
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             });
             fetchInventoryData();
+            clearCreateInputs();
         } catch (error) {
             console.error('Error creating product:', error);
         }
@@ -33,8 +64,13 @@ const TabsInventory = ({ userID, setInventoryData }) => {
     const handleRead = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/inventory/search/${searchTerm}`);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/inventory/search/${searchTerm}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             setInventoryData(response.data);
+            clearReadInputs();
         } catch (error) {
             console.error('Error searching product:', error);
         }
@@ -42,14 +78,23 @@ const TabsInventory = ({ userID, setInventoryData }) => {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+        if (isNaN(updateQuantity) || isNaN(updatePrice)) {
+            alert("Quantity and Price must be valid numbers");
+            return;
+        }
         try {
             await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/inventory/update`, {
                 id: updateProductID,
                 product_name: updateProductName,
                 quantity: parseInt(updateQuantity),
                 price: parseFloat(updatePrice)
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             });
             fetchInventoryData();
+            clearUpdateInputs();
         } catch (error) {
             console.error('Error updating product:', error);
         }
@@ -57,9 +102,18 @@ const TabsInventory = ({ userID, setInventoryData }) => {
 
     const handleDelete = async (e) => {
         e.preventDefault();
+        if (isNaN(deleteProductID)) {
+            alert("Product ID must be a valid number");
+            return;
+        }
         try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/inventory/delete/${deleteProductID}`);
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/inventory/delete/${deleteProductID}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             fetchInventoryData();
+            clearDeleteInputs();
         } catch (error) {
             console.error('Error deleting product:', error);
         }
@@ -100,7 +154,11 @@ const TabsInventory = ({ userID, setInventoryData }) => {
                         type="text"
                         placeholder="Quantity"
                         value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
+                        onChange={(e) => {
+                            if (/^\d*$/.test(e.target.value)) {
+                                setQuantity(e.target.value);
+                            }
+                        }}
                         className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                         required
                     />
@@ -108,7 +166,11 @@ const TabsInventory = ({ userID, setInventoryData }) => {
                         type="number"
                         placeholder="Price"
                         value={price}
-                        onChange={(e) => setPrice(e.target.value)}
+                        onChange={(e) => {
+                            if (/^\d*\.?\d*$/.test(e.target.value)) {
+                                setPrice(e.target.value);
+                            }
+                        }}
                         className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                         required
                     />
@@ -125,7 +187,6 @@ const TabsInventory = ({ userID, setInventoryData }) => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                        required
                     />
                     <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
                         Search
@@ -154,7 +215,11 @@ const TabsInventory = ({ userID, setInventoryData }) => {
                         type="number"
                         placeholder="New Quantity"
                         value={updateQuantity}
-                        onChange={(e) => setUpdateQuantity(e.target.value)}
+                        onChange={(e) => {
+                            if (/^\d*$/.test(e.target.value)) {
+                                setUpdateQuantity(e.target.value);
+                            }
+                        }}
                         className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                         required
                     />
@@ -162,7 +227,11 @@ const TabsInventory = ({ userID, setInventoryData }) => {
                         type="number"
                         placeholder="New Price"
                         value={updatePrice}
-                        onChange={(e) => setUpdatePrice(e.target.value)}
+                        onChange={(e) => {
+                            if (/^\d*\.?\d*$/.test(e.target.value)) {
+                                setUpdatePrice(e.target.value);
+                            }
+                        }}
                         className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                         required
                     />
@@ -191,5 +260,3 @@ const TabsInventory = ({ userID, setInventoryData }) => {
 };
 
 export default TabsInventory;
-
-
