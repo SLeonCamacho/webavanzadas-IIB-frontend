@@ -25,7 +25,7 @@ const Dashboard = () => {
         try {
           const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: `${token}`
             }
           });
           setUserName(response.data.name);
@@ -37,14 +37,14 @@ const Dashboard = () => {
       fetchUserData();
     }
   }, [router]);
-
+  
   useEffect(() => {
     if (userID) {
       const fetchInventoryData = async () => {
         try {
           const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/inventory/user/${userID}`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
+              Authorization: `${localStorage.getItem('token')}`
             }
           });
           setInventoryData(response.data);
