@@ -19,9 +19,11 @@ export default function ResetPassword() {
             return;
         }
         try {
+            console.log('email es este hhhh:', email);
+            console.log('newPassword:', newPassword);
             await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/auth/update-password`, {
-                email,
-                password: newPassword,
+                email: email,
+                newPassword: newPassword,
             });
             router.push('/reset-password/success');
         } catch (error) {

@@ -68,7 +68,7 @@ export default function Login() {
             </Link>
           </li>
           <li>
-            <Link className="text-blue-500 hover:underline" href="/signup">
+            <Link className="text-blue-500 hover:underline" href="/sign-up">
               Not registered yet?
             </Link>
           </li>

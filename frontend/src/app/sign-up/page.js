@@ -18,20 +18,29 @@ export default function SignUp() {
 
     try {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/user/email/${email}`);
-      if (res.data.email) {
+      if (res.status === 200) {
         setError('User already registered. Please go back to the login page.');
-      } else if (password !== confirmPassword) {
-        setError('Passwords do not match');
-      } else {
-        setError('');
-        const registerRes = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, { name, email, password });
-        if (registerRes.data) {
-          router.push(`/signup/success?name=${encodeURIComponent(name)}`);
-        }
       }
     } catch (error) {
-      setError('An error occurred during registration. Please try again.');
-      console.error('Error signing up:', error);
+      if (error.response && error.response.status === 404) {
+        if (password !== confirmPassword) {
+          setError('Passwords do not match');
+        } else {
+          setError('');
+          try {
+            const registerRes = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, { name, email, password });
+            if (registerRes.data) {
+              router.push(`/sign-up/success?name=${encodeURIComponent(name)}`);
+            }
+          } catch (registrationError) {
+            setError('An error occurred during registration. Please try again.');
+            console.error('Error signing up:', registrationError);
+          }
+        }
+      } else {
+        setError('An error occurred. Please try again.');
+        console.error('Error checking email:', error);
+      }
     }
   };
 
@@ -74,16 +83,18 @@ export default function SignUp() {
           />
           {error && <p className="error" style={{ color: 'red' }}>{error}</p>}
           <button
-            type="submit" 
+            type="submit"
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
           >
-            SignUp
+            Sign Up
           </button>
-          <li>
-            <Link className="text-blue-500 hover:underline" href="/login">
-            Already registered? Log in
-            </Link>
-          </li>
+          <ul>
+            <li>
+              <Link className="text-blue-500 hover:underline" href="/login">
+                Already registered? Log in
+              </Link>
+            </li>
+          </ul>
         </form>
       </div>
     </section>

@@ -29,8 +29,8 @@ export default function Home() {
             </Link>
           </li>
           <li>
-            <Link className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700" href="/signUp">
-              SignUp
+            <Link className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700" href="/sign-up">
+              Sign Up
             </Link>
           </li>
         </ul>
