@@ -119,6 +119,19 @@ const TabsInventory = ({ userID, setInventoryData, fetchInventoryData }) => {
         }
     };
 
+    const fetchInventoryDataOnPage = async () => {
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/inventory/user/${userID}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setInventoryData(response.data);
+        } catch (error) {
+            console.error('Error fetching inventory data:', error);
+        }
+    };
+
     return (
         <div>
             <ul className="flex justify-center space-x-4 mb-4">
@@ -176,9 +189,14 @@ const TabsInventory = ({ userID, setInventoryData, fetchInventoryData }) => {
                         className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                         required
                     />
-                    <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
-                        Search
-                    </button>
+                    <div className="flex space-x-4">
+                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+                            Search
+                        </button>
+                        <button type="button" className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700" onClick={fetchInventoryDataOnPage}>
+                            Refresh
+                        </button>
+                    </div>
                 </form>
             )}
             {activeTab === 'update' && (

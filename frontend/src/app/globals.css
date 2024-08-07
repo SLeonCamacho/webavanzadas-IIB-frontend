@@ -31,3 +31,26 @@ body {
     text-wrap: balance;
   }
 }
+
+/* styles.css */
+.tabs li {
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.tabs li:hover {
+  background-color: #ebf8ff; /* Hover azul claro */
+}
+
+.tabs li.active {
+  background-color: #3b82f6; /* Azul seleccionado */
+  color: white;
+  font-weight: bold;
+}
+
+.form-input {
+  max-width: 300px; /* Menos ancho para los inputs */
+}
+

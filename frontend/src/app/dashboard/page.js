@@ -26,7 +26,7 @@ const Dashboard = () => {
       setInventoryData(response.data);
       setTotalProducts(response.data.length);
       setAverageQuantity(response.data.reduce((acc, item) => acc + item.quantity, 0) / response.data.length);
-      setAveragePrice(response.data.reduce((acc, item) => acc + item.price, 0) / response.data.length);
+      setAveragePrice(response.data.reduce((acc, item) => acc + parseFloat(item.price), 0) / response.data.length);
     } catch (error) {
       console.error('Error fetching inventory data:', error);
     }
