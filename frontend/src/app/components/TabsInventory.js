@@ -187,6 +187,7 @@ const TabsInventory = ({ userID, setInventoryData }) => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                        required
                     />
                     <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
                         Search
