@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const TabsInventory = ({ userID, setInventoryData }) => {
+const TabsInventory = ({ userID, setInventoryData, fetchInventoryData }) => {
     const [activeTab, setActiveTab] = useState('create');
     const [productName, setProductName] = useState('');
     const [quantity, setQuantity] = useState('');
@@ -116,19 +116,6 @@ const TabsInventory = ({ userID, setInventoryData }) => {
             clearDeleteInputs();
         } catch (error) {
             console.error('Error deleting product:', error);
-        }
-    };
-
-    const fetchInventoryData = async () => {
-        try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/inventory/user/${userID}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            setInventoryData(response.data);
-        } catch (error) {
-            console.error('Error fetching inventory data:', error);
         }
     };
 
