@@ -25,7 +25,7 @@ const Dashboard = () => {
         try {
           const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
             headers: {
-              Authorization: `${token}`
+              Authorization: `Bearer ${token}`
             }
           });
           setUserName(response.data.name);
@@ -44,7 +44,7 @@ const Dashboard = () => {
         try {
           const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/inventory/user/${userID}`, {
             headers: {
-              Authorization: `${localStorage.getItem('token')}`
+              Authorization: `Bearer ${localStorage.getItem('token')}`
             }
           });
           setInventoryData(response.data);
@@ -61,6 +61,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     router.push('/login');
   };
 
